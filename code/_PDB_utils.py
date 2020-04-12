@@ -20,8 +20,27 @@ def read_chains(PDB_file):
     return PDB_ID, chains
 
 
+def write_FASTAs(PDB_ID, chains):
+    polypeptide_IDs = []
+    for chain_ID, residues in chains.items():
+        if Polypeptide.is_aa(residues[0][0]):
+            polypeptide_ID = '{}_{}'.format(PDB_ID, chain_ID)
+            polypeptide_IDs.append(polypeptide_ID)
+            sequence = []
+            for resname, resseq in residues:
+                try:
+                    sequence.append(Polypeptide.three_to_one(resname))
+                except KeyError:
+                    sequence.append('X')
+            with open('{}.fasta'.format(polypeptide_ID), mode='w') as f:
+                f.write('>{}\n'.format(polypeptide_ID))
+                f.write('{}\n'.format(''.join(sequence)))
+    return polypeptide_IDs
+
+
 if __name__ == '__main__':
     from sys import argv
     PDB_ID, chains = read_chains(argv[1])
+    polypeptide_IDs = write_FASTAs(PDB_ID, chains)
 
 
