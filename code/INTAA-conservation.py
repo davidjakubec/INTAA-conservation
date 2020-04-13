@@ -2,7 +2,7 @@
 
 from sys import argv
 from _PDB_utils import read_chains, write_FASTAs
-from _HMMER_utils import generate_MSAs, calculate_sequence_weights
+from _HMMER_utils import generate_MSAs, calculate_sequence_weights, calculate_information_content
 
 
 def main(PDB_file, sequence_database):
@@ -10,6 +10,7 @@ def main(PDB_file, sequence_database):
     polypeptide_IDs = write_FASTAs(PDB_ID, chains)
     generate_MSAs(polypeptide_IDs, sequence_database)
     calculate_sequence_weights(polypeptide_IDs)
+    calculate_information_content(polypeptide_IDs)
 
 
 if __name__ == '__main__':

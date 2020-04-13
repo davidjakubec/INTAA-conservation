@@ -14,11 +14,17 @@ def calculate_sequence_weights(polypeptide_IDs):
             subprocess.run('esl-weight {}.sto'.format(polypeptide_ID).split(), stdout=f)
 
 
+def calculate_information_content(polypeptide_IDs):
+    for polypeptide_ID in polypeptide_IDs:
+        subprocess.run('esl-alistat --icinfo {}.ic --weight {}.stow'.format(polypeptide_ID, polypeptide_ID).split(), stdout=subprocess.DEVNULL)
+
+
 if __name__ == '__main__':
     from sys import argv
     polypeptide_IDs = [i.split('.')[0] for i in argv[1:-1]]
     sequence_database = argv[-1]
     generate_MSAs(polypeptide_IDs, sequence_database)
     calculate_sequence_weights(polypeptide_IDs)
+    calculate_information_content(polypeptide_IDs)
 
 
