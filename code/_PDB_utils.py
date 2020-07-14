@@ -5,7 +5,7 @@ from Bio.PDB import Polypeptide
 
 
 def read_chains(PDB_file):
-    parser = PDBParser(PERMISSIVE=True)
+    parser = PDBParser(PERMISSIVE=True, QUIET=True)
     PDB_ID = PDB_file.split('.')[0]
     structure = parser.get_structure(PDB_ID, PDB_file)
     model = structure[0]
@@ -14,8 +14,8 @@ def read_chains(PDB_file):
         residues = []
         for residue in chain:
             het, resseq, icode = residue.id
-            if (het == ' ') and (icode == ' '):
-                residues.append((residue.resname, resseq))
+            if (het == ' '):
+                residues.append((residue.resname, resseq, icode))
         chains[chain.id] = residues
     return PDB_ID, chains
 
@@ -27,7 +27,7 @@ def write_FASTAs(PDB_ID, chains):
             polypeptide_ID = '{}_{}'.format(PDB_ID, chain_ID)
             polypeptide_IDs.append(polypeptide_ID)
             sequence = []
-            for resname, resseq in residues:
+            for resname, resseq, icode in residues:
                 try:
                     sequence.append(Polypeptide.three_to_one(resname))
                 except KeyError:
