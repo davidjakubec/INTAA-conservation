@@ -9,9 +9,12 @@ from os import remove
 def write_PDB_information_content(PDB_ID, chains, polypeptide_IDs):
     with open('{}.ic'.format(PDB_ID), mode='w') as fo:
         for polypeptide_ID in polypeptide_IDs:
-            chain_ID = polypeptide_ID.split('_')[1]
-            with open('{}.ic'.format(polypeptide_ID)) as fi:
-                chain_information_content = [i.strip().split()[3] for i in fi if (i[0] != '#') and (i[0] != '/') and (i.lstrip()[0] != '-')]
+            chain_ID = polypeptide_ID.split('_')[-1]
+            try:
+                with open('{}.ic'.format(polypeptide_ID)) as fi:
+                    chain_information_content = [i.strip().split()[3] for i in fi if (i[0] != '#') and (i[0] != '/') and (i.lstrip()[0] != '-')]
+            except FileNotFoundError:
+                continue
             assert len(chains[chain_ID]) == len(chain_information_content)
             for (resname, resseq, icode), information_content in zip(chains[chain_ID], chain_information_content):
                 fo.write('\t'.join((chain_ID, resname, str(resseq), icode, information_content)) + '\n')
@@ -20,7 +23,10 @@ def write_PDB_information_content(PDB_ID, chains, polypeptide_IDs):
 def clean_up(polypeptide_IDs):
     for polypeptide_ID in polypeptide_IDs:
         for ext in ('fasta', 'sto', 'stow', 'ic'):
-            remove('{}.{}'.format(polypeptide_ID, ext))
+            try:
+                remove('{}.{}'.format(polypeptide_ID, ext))
+            except FileNotFoundError:
+                continue
 
 
 def main(PDB_file, sequence_database):

@@ -6,7 +6,7 @@ from Bio.PDB import Polypeptide
 
 def read_chains(PDB_file):
     parser = PDBParser(PERMISSIVE=True, QUIET=True)
-    PDB_ID = PDB_file.split('.')[0]
+    PDB_ID = PDB_file
     structure = parser.get_structure(PDB_ID, PDB_file)
     model = structure[0]
     chains = dict()
