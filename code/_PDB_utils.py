@@ -23,7 +23,7 @@ def read_chains(PDB_file):
 def write_FASTAs(PDB_ID, chains):
     polypeptide_IDs = []
     for chain_ID, residues in chains.items():
-        if Polypeptide.is_aa(residues[0][0]):
+        if residues and Polypeptide.is_aa(residues[0][0]):
             polypeptide_ID = '{}_{}'.format(PDB_ID, chain_ID)
             polypeptide_IDs.append(polypeptide_ID)
             sequence = []
