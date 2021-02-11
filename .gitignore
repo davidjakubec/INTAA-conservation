@@ -1,4 +1,5 @@
 code/__pycache__/
 database/uniprot_sprot.fasta
-tests/
+tests/**
+!tests/run_tests.sh
 .venv/
