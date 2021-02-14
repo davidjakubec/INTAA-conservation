@@ -16,7 +16,7 @@ def calculate_sequence_weights(polypeptide_IDs):
 
 def calculate_information_content(polypeptide_IDs):
     for polypeptide_ID in polypeptide_IDs:
-        subprocess.run('esl-alistat --icinfo {}.ic --weight {}.stow'.format(polypeptide_ID, polypeptide_ID).split(), stdout=subprocess.DEVNULL)
+        subprocess.run('esl-alistat --icinfo {}.ic --rinfo {}.r --weight {}.stow'.format(polypeptide_ID, polypeptide_ID, polypeptide_ID).split(), stdout=subprocess.DEVNULL)
 
 
 if __name__ == '__main__':

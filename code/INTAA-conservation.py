@@ -13,16 +13,18 @@ def write_PDB_information_content(PDB_ID, chains, polypeptide_IDs):
             try:
                 with open('{}.ic'.format(polypeptide_ID)) as fi:
                     chain_information_content = [i.strip().split()[3] for i in fi if (i[0] != '#') and (i[0] != '/') and (i.lstrip()[0] != '-')]
+                with open('{}.r'.format(polypeptide_ID)) as fi:
+                    chain_freqgap = [i.strip().split()[5] for i in fi if (i[0] != '#') and (i[0] != '/') and (i.lstrip()[0] != '-')]
             except FileNotFoundError:
                 continue
-            assert len(chains[chain_ID]) == len(chain_information_content)
-            for (resname, resseq, icode), information_content in zip(chains[chain_ID], chain_information_content):
-                fo.write('\t'.join((chain_ID, resname, str(resseq), icode, information_content)) + '\n')
+            assert len(chains[chain_ID]) == len(chain_information_content) == len(chain_freqgap)
+            for (resname, resseq, icode), information_content, freqgap in zip(chains[chain_ID], chain_information_content, chain_freqgap):
+                fo.write('\t'.join((chain_ID, resname, str(resseq), icode, information_content, freqgap)) + '\n')
 
 
 def clean_up(polypeptide_IDs):
     for polypeptide_ID in polypeptide_IDs:
-        for ext in ('fasta', 'sto', 'stow', 'ic'):
+        for ext in ('fasta', 'sto', 'stow', 'ic', 'r'):
             try:
                 remove('{}.{}'.format(polypeptide_ID, ext))
             except FileNotFoundError:
